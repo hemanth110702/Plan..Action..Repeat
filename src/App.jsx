@@ -16,9 +16,35 @@ function App() {
     }
 
     const lowercasedFilter = searchTerm.toLowerCase();
-    return currentTabTickets.filter((ticket) =>
-      ticket.id.toLowerCase().includes(lowercasedFilter)
-    );
+
+    return currentTabTickets.filter((ticket) => {
+      // Check against multiple fields
+      const idMatch = ticket.id.toLowerCase().includes(lowercasedFilter);
+      const priorityMatch = ticket.priority
+        .toLowerCase()
+        .includes(lowercasedFilter);
+      const descriptionMatch = (ticket.shortDescription || "")
+        .toLowerCase()
+        .includes(lowercasedFilter);
+      const updateMatch = (ticket.lastUpdate || "")
+        .toLowerCase()
+        .includes(lowercasedFilter);
+      const findingsMatch = (ticket.findings || "")
+        .toLowerCase()
+        .includes(lowercasedFilter);
+      const actionPlanMatch = (ticket.actionPlan || "")
+        .toLowerCase()
+        .includes(lowercasedFilter);
+
+      return (
+        idMatch ||
+        priorityMatch ||
+        descriptionMatch ||
+        updateMatch ||
+        findingsMatch ||
+        actionPlanMatch
+      );
+    });
   }, [searchTerm, tickets, activeTab]);
 
   const tabNames = Object.keys(tickets);
@@ -30,7 +56,6 @@ function App() {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="p-4">
           <TabsList>
             {tabNames.map((name) => (
-              // --- THIS IS THE UPDATED LINE ---
               <TabsTrigger key={name} value={name} className="cursor-pointer">
                 {name} ({tickets[name].length})
               </TabsTrigger>

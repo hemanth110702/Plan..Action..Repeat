@@ -24,6 +24,11 @@ export const useTicketStore = create(
       },
       activeTab: 'Incidents',
 
+      loadingTicketId: null,
+
+      // New action to set the loading ticket
+      setLoadingTicketId: (ticketId) => set({ loadingTicketId: ticketId }),
+
       setActiveTab: (tabName) => set({ activeTab: tabName }),
 
       addTicket: (newTicket) => {

@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
-import { Copy, Check, ArrowRight, Trash2 } from "lucide-react";
+import { Copy, Check, ArrowRight, Trash2, Loader2 } from "lucide-react";
 import { useTicketStore } from "../store/ticketStore";
 
 const getPriorityColor = (priority) => {
@@ -27,9 +27,25 @@ const getSlaColor = (sla) => {
 };
 
 export const TicketCard = ({ ticket }) => {
+  // Get global loading state and the action to update it from the store
+  const loadingTicketId = useTicketStore((state) => state.loadingTicketId);
+  const setLoadingTicketId = useTicketStore(
+    (state) => state.setLoadingTicketId
+  );
+
   const updateTicket = useTicketStore((state) => state.updateTicket);
   const moveTicket = useTicketStore((state) => state.moveTicket);
   const deleteTicket = useTicketStore((state) => state.deleteTicket);
+
+  const handleDelayedAction = (action) => {
+    // Set the global loading state with this ticket's ID
+    setLoadingTicketId(ticket.id);
+    action();
+    // After 2 seconds, clear the global loading state
+    setTimeout(() => {
+      setLoadingTicketId(null);
+    }, 2000);
+  };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(ticket.id);
@@ -48,43 +64,55 @@ export const TicketCard = ({ ticket }) => {
   };
 
   const renderMoveButton = () => {
-    if (ticket.status === "plan") {
-      return (
-        <Button
-          onClick={() => moveTicket(ticket.id, "action")}
-          size="sm"
-          className="cursor-pointer"
-        >
-          Mark as Reviewed <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    }
-    if (ticket.status === "action") {
-      return (
-        <Button
-          onClick={() => moveTicket(ticket.id, "backlog")}
-          size="sm"
-          variant="secondary"
-          className="cursor-pointer"
-        >
-          Mark as Complete <Check className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    }
-    if (ticket.status === "backlog") {
-      return (
-        <Button
-          onClick={() => moveTicket(ticket.id, "plan")}
-          size="sm"
-          variant="outline"
-          className="cursor-pointer"
-        >
-          Move to Plan <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    }
-    return null;
+    const buttonDetails = {
+      plan: {
+        text: "Mark as Reviewed",
+        icon: <ArrowRight className="ml-2 h-4 w-4" />,
+        nextStatus: "action",
+        variant: "outline",
+      },
+      action: {
+        text: "Mark as Complete",
+        icon: <Check className="ml-2 h-4 w-4" />,
+        nextStatus: "backlog",
+        variant: "secondary",
+      },
+      backlog: {
+        text: "Move to Plan",
+        icon: <ArrowRight className="ml-2 h-4 w-4" />,
+        nextStatus: "plan",
+        variant: "outline",
+      },
+    };
+
+    const details = buttonDetails[ticket.status];
+    if (!details) return null;
+
+    const isAnyButtonLoading = loadingTicketId !== null;
+    const isThisButtonLoading = loadingTicketId === ticket.id;
+
+    return (
+      <Button
+        onClick={() =>
+          handleDelayedAction(() => moveTicket(ticket.id, details.nextStatus))
+        }
+        disabled={isAnyButtonLoading}
+        size="sm"
+        variant={details.variant}
+        className="cursor-pointer w-40"
+      >
+        {isThisButtonLoading ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <>
+            {details.text} {details.icon}
+          </>
+        )}
+      </Button>
+    );
   };
+
+  const isAnyButtonLoading = loadingTicketId !== null;
 
   return (
     <Card className="mb-4">
@@ -97,6 +125,7 @@ export const TicketCard = ({ ticket }) => {
               size="icon"
               onClick={handleCopy}
               className="cursor-pointer"
+              disabled={isAnyButtonLoading}
             >
               <Copy className="h-4 w-4" />
             </Button>
@@ -155,6 +184,7 @@ export const TicketCard = ({ ticket }) => {
                 variant="destructive"
                 size="icon"
                 className="cursor-pointer"
+                disabled={isAnyButtonLoading}
               >
                 <Trash2 className="h-4 w-4 text-red-600" />
               </Button>
