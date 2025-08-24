@@ -74,7 +74,7 @@ Welcome to Plan..Action..Repeat, a client-side web application designed to repla
         <th>Desktop View</th>
     </tr>
     <tr>
-      <td colspan="3" style="text-align: left;font-weight: bold;">Home</td>
+      <td colspan="3" style="text-align: left;font-weight: bold;">Backlog Phase - make tickets ready here with your observations and move them to Plan phase</td>
     </tr>
     <tr>
         <td>
@@ -82,7 +82,7 @@ Welcome to Plan..Action..Repeat, a client-side web application designed to repla
         </td>
     </tr>
     <tr>
-      <td colspan="3" style="text-align: left;font-weight: bold;">My Games</td>
+      <td colspan="3" style="text-align: left;font-weight: bold;">Plan Phase - review each ticket with your leads and write action plan for each of them, move them to Action Phase</td>
     </tr>
     <tr>
         <td>
@@ -90,15 +90,7 @@ Welcome to Plan..Action..Repeat, a client-side web application designed to repla
         </td>
     </tr>
     <tr>
-      <td colspan="3" style="text-align: left;font-weight: bold;">Game Info</td>
-    </tr>
-    <tr>
-        <td>
-            <img src="https://github.com/hemanth110702/GameStash/assets/89832451/db91fae3-130d-4cf1-865f-932fda439bac" width="100%" title="Desktop view - Action Phase"/>
-        </td>
-    </tr>
-    <tr>
-      <td colspan="3" style="text-align: left;font-weight: bold;">Game Info - video, photos</td>
+      <td colspan="3" style="text-align: left;font-weight: bold;">Action Phase - execute the action plan</td>
     </tr>
     <tr>
         <td>
@@ -106,7 +98,7 @@ Welcome to Plan..Action..Repeat, a client-side web application designed to repla
         </td>
     </tr> 
     <tr>
-      <td colspan="3" style="text-align: left;font-weight: bold;">Light theme</td>
+      <td colspan="3" style="text-align: left;font-weight: bold;">Add Ticket - Add tickets into backlog phase</td>
     </tr>
     <tr>
         <td>
