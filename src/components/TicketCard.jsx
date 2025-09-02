@@ -13,6 +13,7 @@ import {
 import { Copy, Check, ArrowRight, Trash2, Loader2 } from "lucide-react";
 import { useTicketStore } from "../store/ticketStore";
 
+// Helper function for Priority background color
 const getPriorityColor = (priority) => {
   switch (priority) {
     case "P1":
@@ -28,7 +29,9 @@ const getPriorityColor = (priority) => {
   }
 };
 
+// Helper function for SLA background color
 const getSlaColor = (sla) => {
+  if (sla === "" || sla === null) return "bg-gray-400 text-white";
   if (sla >= 80) return "bg-red-500 text-white";
   if (sla >= 60) return "bg-yellow-400 text-black";
   return "bg-green-500 text-white";
@@ -55,10 +58,19 @@ export const TicketCard = ({ ticket }) => {
     navigator.clipboard.writeText(ticket.id);
   };
 
+  // This updates the value as the user types
   const handleInputChange = (e) => {
-    const value =
-      e.target.name === "sla" ? parseInt(e.target.value) || 0 : e.target.value;
-    updateTicket(ticket.id, { [e.target.name]: value });
+    const { name, value } = e.target;
+    const updatedValue =
+      name === "sla" ? (value === "" ? "" : parseInt(value, 10)) : value;
+    updateTicket(ticket.id, { [name]: updatedValue });
+  };
+
+  // NEW: This function handles the logic for when the SLA input loses focus
+  const handleSlaBlur = () => {
+    if (ticket.sla === "" || ticket.sla === null || ticket.sla === 0) {
+      updateTicket(ticket.id, { sla: 1 });
+    }
   };
 
   const handlePriorityChange = (newPriority) => {
@@ -94,13 +106,10 @@ export const TicketCard = ({ ticket }) => {
         variant: "outline",
       },
     };
-
     const details = buttonDetails[ticket.status];
     if (!details) return null;
-
     const isAnyButtonLoading = loadingTicketId !== null;
     const isThisButtonLoading = loadingTicketId === ticket.id;
-
     return (
       <Button
         onClick={() =>
@@ -115,7 +124,8 @@ export const TicketCard = ({ ticket }) => {
           <Loader2 className="h-4 w-4 animate-spin" />
         ) : (
           <>
-            {details.text} {details.icon}
+            {" "}
+            {details.text} {details.icon}{" "}
           </>
         )}
       </Button>
@@ -144,20 +154,47 @@ export const TicketCard = ({ ticket }) => {
             <Select
               value={ticket.priority}
               onValueChange={handlePriorityChange}
+              disabled={isAnyButtonLoading}
             >
               <SelectTrigger
-                className={`w-[55px] px-2 py-1 rounded-md focus:ring-0 focus:ring-offset-0 ${getPriorityColor(
+                className={`w-[60px] px-2 py-1 rounded-md focus:ring-0 focus:ring-offset-0 ${getPriorityColor(
                   ticket.priority
                 )}`}
               >
                 <SelectValue placeholder="P" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="P1">P1</SelectItem>
-                <SelectItem value="P2">P2</SelectItem>
-                <SelectItem value="P3">P3</SelectItem>
-                <SelectItem value="P4">P4</SelectItem>
-                <SelectItem value="P5">P5</SelectItem>
+              {/* UPDATED: Added a solid background and border to the dropdown content */}
+              <SelectContent className="bg-cyan-200 border">
+                <SelectItem
+                  value="P1"
+                  className="cursor-pointer hover:bg-blue-100"
+                >
+                  P1
+                </SelectItem>
+                <SelectItem
+                  value="P2"
+                  className="cursor-pointer hover:bg-blue-100"
+                >
+                  P2
+                </SelectItem>
+                <SelectItem
+                  value="P3"
+                  className="cursor-pointer hover:bg-blue-100"
+                >
+                  P3
+                </SelectItem>
+                <SelectItem
+                  value="P4"
+                  className="cursor-pointer hover:bg-blue-100"
+                >
+                  P4
+                </SelectItem>
+                <SelectItem
+                  value="P5"
+                  className="cursor-pointer hover:bg-blue-100"
+                >
+                  P5
+                </SelectItem>
               </SelectContent>
             </Select>
 
@@ -167,7 +204,9 @@ export const TicketCard = ({ ticket }) => {
                 name="sla"
                 value={ticket.sla}
                 onChange={handleInputChange}
-                className={`w-[50px] px-2 py-1 h-auto rounded-l-md rounded-r-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 ${getSlaColor(
+                onBlur={handleSlaBlur} // UPDATED: Added the onBlur handler
+                disabled={isAnyButtonLoading}
+                className={`w-[50px] text-center px-1 py-1 h-auto rounded-l-md rounded-r-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${getSlaColor(
                   ticket.sla
                 )}`}
               />
@@ -192,6 +231,7 @@ export const TicketCard = ({ ticket }) => {
             name="lastUpdate"
             value={ticket.lastUpdate}
             onChange={handleInputChange}
+            disabled={isAnyButtonLoading}
           />
         </div>
         <div>
@@ -202,6 +242,7 @@ export const TicketCard = ({ ticket }) => {
             name="findings"
             value={ticket.findings}
             onChange={handleInputChange}
+            disabled={isAnyButtonLoading}
           />
         </div>
         <div>
@@ -210,6 +251,7 @@ export const TicketCard = ({ ticket }) => {
             name="actionPlan"
             value={ticket.actionPlan}
             onChange={handleInputChange}
+            disabled={isAnyButtonLoading}
           />
         </div>
         <div className="flex justify-between items-center pt-2">
