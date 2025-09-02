@@ -2,6 +2,14 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
+import { Input } from "./ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 import { Copy, Check, ArrowRight, Trash2, Loader2 } from "lucide-react";
 import { useTicketStore } from "../store/ticketStore";
 
@@ -27,21 +35,17 @@ const getSlaColor = (sla) => {
 };
 
 export const TicketCard = ({ ticket }) => {
-  // Get global loading state and the action to update it from the store
   const loadingTicketId = useTicketStore((state) => state.loadingTicketId);
   const setLoadingTicketId = useTicketStore(
     (state) => state.setLoadingTicketId
   );
-
   const updateTicket = useTicketStore((state) => state.updateTicket);
   const moveTicket = useTicketStore((state) => state.moveTicket);
   const deleteTicket = useTicketStore((state) => state.deleteTicket);
 
   const handleDelayedAction = (action) => {
-    // Set the global loading state with this ticket's ID
     setLoadingTicketId(ticket.id);
     action();
-    // After 2 seconds, clear the global loading state
     setTimeout(() => {
       setLoadingTicketId(null);
     }, 2000);
@@ -52,7 +56,13 @@ export const TicketCard = ({ ticket }) => {
   };
 
   const handleInputChange = (e) => {
-    updateTicket(ticket.id, { [e.target.name]: e.target.value });
+    const value =
+      e.target.name === "sla" ? parseInt(e.target.value) || 0 : e.target.value;
+    updateTicket(ticket.id, { [e.target.name]: value });
+  };
+
+  const handlePriorityChange = (newPriority) => {
+    updateTicket(ticket.id, { priority: newPriority });
   };
 
   const handleDelete = () => {
@@ -131,21 +141,47 @@ export const TicketCard = ({ ticket }) => {
             </Button>
           </div>
           <div className="flex items-center gap-2 text-xs font-bold">
-            <span
-              className={`px-2 py-1 rounded-md ${getPriorityColor(
-                ticket.priority
-              )}`}
+            <Select
+              value={ticket.priority}
+              onValueChange={handlePriorityChange}
             >
-              {ticket.priority}
-            </span>
-            <span className={`px-2 py-1 rounded-md ${getSlaColor(ticket.sla)}`}>
-              {ticket.sla}% SLA
-            </span>
+              <SelectTrigger
+                className={`w-[55px] px-2 py-1 rounded-md focus:ring-0 focus:ring-offset-0 ${getPriorityColor(
+                  ticket.priority
+                )}`}
+              >
+                <SelectValue placeholder="P" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="P1">P1</SelectItem>
+                <SelectItem value="P2">P2</SelectItem>
+                <SelectItem value="P3">P3</SelectItem>
+                <SelectItem value="P4">P4</SelectItem>
+                <SelectItem value="P5">P5</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <div className="flex items-center">
+              <Input
+                type="number"
+                name="sla"
+                value={ticket.sla}
+                onChange={handleInputChange}
+                className={`w-[50px] px-2 py-1 h-auto rounded-l-md rounded-r-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 ${getSlaColor(
+                  ticket.sla
+                )}`}
+              />
+              <span
+                className={`px-2 py-1 rounded-r-md ${getSlaColor(ticket.sla)}`}
+              >
+                %
+              </span>
+            </div>
           </div>
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="pt-2 pb-1 border-b">
+      <CardContent className="space-y-4 pt-4">
+        <div className="pb-1 border-b">
           <p className="text-sm text-muted-foreground italic">
             {ticket.shortDescription || "No description provided."}
           </p>
@@ -186,7 +222,7 @@ export const TicketCard = ({ ticket }) => {
                 className="cursor-pointer"
                 disabled={isAnyButtonLoading}
               >
-                <Trash2 className="h-4 w-4 text-red-600" />
+                <Trash2 className="h-4 w-4 text-white" />
               </Button>
             )}
           </div>
