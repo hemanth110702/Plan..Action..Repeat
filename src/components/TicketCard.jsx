@@ -213,7 +213,7 @@ export const TicketCard = ({ ticket }) => {
               <span
                 className={`px-2 py-1 rounded-r-md ${getSlaColor(ticket.sla)}`}
               >
-                %
+                % SLA
               </span>
             </div>
           </div>
