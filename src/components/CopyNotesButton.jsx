@@ -18,10 +18,18 @@ export const CopyNotesButton = () => {
     const formattedNotes = planTickets
       .map((ticket) => {
         return `
-Ticket: ${ticket.id} (${ticket.priority}, ${ticket.sla}% SLA)
+Ticket:
+    ${ticket.id} (${ticket.priority}, ${ticket.sla}% SLA)
+
+Description: 
+    ${ticket.shortDescription}
+
 Last Update: 
-${ticket.lastUpdate || "N/A"}
-My Findings: ${ticket.findings || "N/A"}
+    ${ticket.lastUpdate || "N/A"}
+    
+My Findings: 
+    ${ticket.findings || "N/A"}
+    
 --------------------------------------
             `.trim();
       })
