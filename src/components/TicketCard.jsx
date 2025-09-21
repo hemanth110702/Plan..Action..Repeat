@@ -51,7 +51,7 @@ export const TicketCard = ({ ticket }) => {
     action();
     setTimeout(() => {
       setLoadingTicketId(null);
-    }, 2000);
+    }, 500);
   };
 
   const handleCopy = () => {
