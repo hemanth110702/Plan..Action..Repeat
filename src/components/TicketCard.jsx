@@ -226,6 +226,17 @@ export const TicketCard = ({ ticket }) => {
           </p>
         </div>
         <div>
+          <label htmlFor="caller" className="text-sm font-medium">
+            Caller:{" "}
+          </label>
+          <input
+            name="caller"
+            value={ticket.caller}
+            onChange={handleInputChange}
+            className="b-0 mb-4 focus:ring-0 focus:outline-none italic"
+            /*className="ml-2 text-sm bg-transparent border-b mb-4 focus:outline-none focus:ring-0 focus:border-b-2"*/
+          />
+          <br />
           <label className="text-sm font-medium">Last Update</label>
           <Textarea
             name="lastUpdate"

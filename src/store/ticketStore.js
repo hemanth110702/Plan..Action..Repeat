@@ -9,6 +9,7 @@ export const useTicketStore = create(
         Incidents: [
           {
             id: 'INC123456',
+            caller: 'John',
             shortDescription: 'User cannot access shared drive.',
             priority: 'P3',
             sla: 98,
@@ -17,7 +18,7 @@ export const useTicketStore = create(
             actionPlan: '',
             status: 'backlog'
           },
-          { id: 'INC987654', shortDescription: 'User cannot access email.', priority: 'P5', sla: 99, lastUpdate: '', findings: '', actionPlan: '', status: 'plan' },
+          { id: 'INC987654', caller: 'Jane', shortDescription: 'User cannot access email.', priority: 'P5', sla: 99, lastUpdate: '', findings: '', actionPlan: '', status: 'plan' },
         ],
         Tasks: [],
         SR: [],

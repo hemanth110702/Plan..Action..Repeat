@@ -23,6 +23,9 @@ function App() {
       const priorityMatch = ticket.priority
         .toLowerCase()
         .includes(lowercasedFilter);
+      const callerMatch = (ticket.caller || "")
+        .toLowerCase()
+        .includes(lowercasedFilter);
       const descriptionMatch = (ticket.shortDescription || "")
         .toLowerCase()
         .includes(lowercasedFilter);
@@ -38,6 +41,7 @@ function App() {
 
       return (
         idMatch ||
+        callerMatch ||
         priorityMatch ||
         descriptionMatch ||
         updateMatch ||

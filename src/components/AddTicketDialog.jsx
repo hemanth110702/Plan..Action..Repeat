@@ -24,6 +24,7 @@ import { PlusCircle } from "lucide-react";
 
 export const AddTicketDialog = () => {
   const [id, setId] = useState("");
+  const [caller, setCaller] = useState("");
   const [shortDescription, setShortDescription] = useState("");
   const [priority, setPriority] = useState("P3");
   const [sla, setSla] = useState(100);
@@ -36,6 +37,7 @@ export const AddTicketDialog = () => {
 
     addTicket({
       id,
+      caller,
       shortDescription,
       priority,
       sla,
@@ -45,6 +47,7 @@ export const AddTicketDialog = () => {
     });
 
     setId("");
+    setCaller("");
     setShortDescription("");
     setPriority("P3");
     setSla(100);
@@ -83,6 +86,18 @@ export const AddTicketDialog = () => {
                 onChange={(e) => setId(e.target.value.toUpperCase())}
                 className="col-span-3"
                 placeholder="e.g., INC123456"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="caller" className="text-right">
+                Caller
+              </Label>
+              <Input
+                id="caller"
+                value={caller}
+                onChange={(e) => setCaller(e.target.value)}
+                className="col-span-3"
+                placeholder="John Doe"
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">

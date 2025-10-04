@@ -15,7 +15,7 @@ export const Header = ({ setSearchTerm }) => {
       <div className="w-full md:w-1/3">
         <Input
           type="search"
-          placeholder="Search by Ticket ID..."
+          placeholder="Search by Ticket ID, Caller, or Description..."
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
