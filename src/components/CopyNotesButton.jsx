@@ -21,6 +21,9 @@ export const CopyNotesButton = () => {
 Ticket:
     ${ticket.id} (${ticket.priority}, ${ticket.sla}% SLA)
 
+Caller: 
+    ${ticket.caller || "N/A"}
+
 Description: 
     ${ticket.shortDescription}
 
