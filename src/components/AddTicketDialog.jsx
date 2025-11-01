@@ -26,8 +26,8 @@ export const AddTicketDialog = () => {
   const [id, setId] = useState("");
   const [caller, setCaller] = useState("");
   const [shortDescription, setShortDescription] = useState("");
-  const [priority, setPriority] = useState("P3");
-  const [sla, setSla] = useState(100);
+  const [priority, setPriority] = useState("P4");
+  const [sla, setSla] = useState(10);
   const [isOpen, setIsOpen] = useState(false);
   const addTicket = useTicketStore((state) => state.addTicket);
 
@@ -49,8 +49,8 @@ export const AddTicketDialog = () => {
     setId("");
     setCaller("");
     setShortDescription("");
-    setPriority("P3");
-    setSla(100);
+    setPriority("P4");
+    setSla(10);
     setIsOpen(false);
   };
 
