@@ -32,6 +32,9 @@ Last Update:
     
 My Findings: 
     ${ticket.findings || "N/A"}
+
+Action Plan"
+     ${ticket.actionPlan || "N/A"}
     
 --------------------------------------
             `.trim();
